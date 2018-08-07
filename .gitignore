@@ -44,3 +44,9 @@ Thumbs.db
 *.png
 *.jpeg
 *.pdf
+*.bmp
+*.jpg
+
+# Data Files #
+#############
+*.txt
