@@ -24,7 +24,7 @@ def load_png(name):
         else:
             image = image.convert_alpha()
     except pygame.error, message:
-        print 'Cannot load image:', fullname
+        print('Cannot load image:', fullname)
         raise SystemExit, message
     return image, image.get_rect()
 
@@ -44,7 +44,7 @@ class Resource(object):
         self.len = int(self.food/10. * self.world.pixel)
         self.pos = [int(np.random.rand() * self.world.len), int(np.random.rand() * self.world.len)]
         self.rect = pygame.rect.Rect((self.pos[0], self.pos[1], self.len, self.len))
-        print self.pos, self.rect
+        print(self.pos, self.rect)
 
     def update(self):
         self.len = int(self.food/10. * self.world.pixel)
@@ -171,7 +171,7 @@ class Worker(object):
         self.res_mem.remove(self.res_mem[0])
         self.destination = None
 
-        print self.hive.res_map
+        print(self.hive.res_map)
 
         #if self.hive.food >= 2.5: self.hive.create(self)
         #self.dancing = True
@@ -203,7 +203,7 @@ class Worker(object):
         self.food += 1
         res.food -= 1
         res.update()
-        print res, self.food, res.food
+        print(res, self.food, res.food)
         self.direction = np.mod(self.direction+4, 8)
         self.rect.move_ip(DIR_DELTA[self.direction] * self.speed)
 
@@ -237,11 +237,11 @@ class Worker(object):
         vector = unit_vector([dx, dy])
 
         for index, direction in enumerate(DIR_DELTA):
-            print index, direction, np.array(vector), np.array(vector) - direction
+            print(index, direction, np.array(vector), np.array(vector) - direction)
             if np.sum((np.array(vector) - direction)**2) == 0:
                 self.direction = index
                 break
-        print self.destination, self.rect, vector, self.direction, DIR_DELTA[self.direction]
+        print(self.destination, self.rect, vector, self.direction, DIR_DELTA[self.direction])
 
     def step_forward(self):
 
@@ -333,8 +333,8 @@ def run_game(Map, visual, gnum, param):
     time = 0
     total_resource = 0
     for store in Map.resource: total_resource += store.food
-    print "Running Game {}\nVisual = {} Total Resources = {}".format(gnum, visual, total_resource)
-    print "PARAMETERS USED:\nCarry = {:.2f}  Memory = {:.2f}  P(turn) = {:.2f}\n".format(param[0], param[1], param[2])
+    print("Running Game {}\nVisual = {} Total Resources = {}".format(gnum, visual, total_resource))
+    print("PARAMETERS USED:\nCarry = {:.2f}  Memory = {:.2f}  P(turn) = {:.2f}\n".format(param[0], param[1], param[2]))
 
     if visual:
         pygame.init()
@@ -358,8 +358,8 @@ def run_game(Map, visual, gnum, param):
 
             clock.tick(40)
 
-        if time % 500 == 0: print "Time = {}  Res left = {:.1f} ({:.2f}%)  N workers = {}".format(time, 
-                                 float(total_resource) - Map.hives[0].total_food, resource_left, n_workers)
+        if time % 500 == 0: print("Time = {}  Res left = {:.1f} ({:.2f}%)  N workers = {}".format(time, 
+                                 float(total_resource) - Map.hives[0].total_food, resource_left, n_workers))
         if time == 5000: running = False
         time += 1
 
@@ -430,7 +430,7 @@ if os.path.exists('Parameters_Bees.txt'):
     except: param = [start_carry, start_memory, start_P_turn]
 else: param = [start_carry, start_memory, start_P_turn]
 
-for n in xrange(ngames):
+for n in range(ngames):
     
     tot_carry = []
     tot_memory = []
@@ -442,7 +442,7 @@ for n in xrange(ngames):
 
     result, food_ratio, param = assess_game(Map, food_ratio, res_left, time, param)
 
-    print result
+    print(result)
 
     with file('Parameters_Bees.txt', 'w') as outfile: 
         np.savetxt(outfile, param)

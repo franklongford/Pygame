@@ -6,8 +6,7 @@ import pygame
 import math
 import sys
 import numpy as np
-import scipy as sp
-from scipy import stats, misc
+
 import matplotlib.pyplot as plt
 from PIL import Image
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -47,7 +46,7 @@ class Worker(object):
 
     def step_forward(self):
 
-    	self.rect.move_ip(DIR_DELTA[self.direction] * self.speed)
+        self.rect.move_ip(DIR_DELTA[self.direction] * self.speed)
 
         for res in self.world.resources:
             if self.rect.colliderect(res.rect):
@@ -62,35 +61,32 @@ class Worker(object):
 
 
     def visit_hive(self):
-#
-		if self.food > 0:
-			self.deliver_food()
-			if np.random.rand() < 0.5: 
-				self.scouting = True
-			else:
-				self.scouting = False
-				self.destination = random.choice(self.hive.res_mem)
-				self.choose_direction()
+
+        if self.food > 0:
+            self.deliver_food()
+            if np.random.rand() < 0.5: 
+                self.scouting = True
+            else:
+                self.scouting = False
+                self.destination = random.choice(self.hive.res_mem)
+                self.choose_direction()
 
     def deliver_food(self):
-        
+
         self.hive.food += self.food
         self.hive.total_food += self.food
         self.food = 0
 
-        if self.hive.food >= 5:
-        	self.hive.create(self)
-
-        if self.res_mem not in self.hive.res_mem:
-        	self.hive.res_mem.append(self.destination)
+        if self.hive.food >= 5:self.hive.create(self)
+        if self.res_mem not in self.hive.res_mem: self.hive.res_mem.append(self.destination)
 
     def pick_up(self, res):
 
-		self.food += 1
-		res.food -= 1
-		if self.food >= self.carry: self.destination = self.hive 
-		elif res != self.destination: self.destination = res
-		res.update()
+        self.food += 1
+        res.food -= 1
+        if self.food >= self.carry: self.destination = self.hive 
+        elif res != self.destination: self.destination = res
+        res.update()
 
     def choose_direction(self):
 
@@ -107,10 +103,10 @@ class Worker(object):
         
     def check_periodicity(self):
 
-		if self.rect[0] >= self.world.len: self.rect[0] -= self.world.len
-		if self.rect[1] >= self.world.len: self.rect[1] -= self.world.len
-		if self.rect[0] < 0: self.rect[0] += self.world.len
-		if self.rect[1] < 0: self.rect[1] += self.world.len
+        if self.rect[0] >= self.world.len: self.rect[0] -= self.world.len
+        if self.rect[1] >= self.world.len: self.rect[1] -= self.world.len
+        if self.rect[0] < 0: self.rect[0] += self.world.len
+        if self.rect[1] < 0: self.rect[1] += self.world.len
 
 
     def turn(self):
@@ -181,8 +177,8 @@ class World(object):
         self.hives = [Hive(int(np.random.rand()*L), int(np.random.rand()*L), self, 1) for n in range(1)]
 
     def update(self):
-    	for res in self.resources: 
-    		res.update()
+        for res in self.resources: 
+            res.update()
         for hive in self.hives: 
             for worker in hive.workers: worker.update()
 
@@ -202,18 +198,22 @@ def run_game(Map, visual):
         clock = pygame.time.Clock()
 
     running = True
+    frame = 0
+    frame_skip = 2
     while running:
 
-		Map.update()
+        Map.update()
 
-		if visual:
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					running = False
-					break
-		if len(Map.resources) == 0: running = False
+        if visual and np.mod(frame, frame_skip) == 0:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    break
+            Map.draw()
 
-		Map.draw()
+        if len(Map.resources) == 0: running = False
+        if np.sum([len(hive.workers) for hive in Map.hives]) == 0: running = False
+        frame += 1
 
 scale = 3
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -223,8 +223,6 @@ DIR_DELTA  = np.array([[0, -1], [ 1, -1], [ 1, 0], [ 1,  1],
               		   [0,  1], [-1,  1], [-1, 0], [-1, -1]])
 
 visual = True
-
-
 Map = World(L, scale)
 
 run_game(Map, visual)
