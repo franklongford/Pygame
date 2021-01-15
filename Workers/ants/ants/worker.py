@@ -4,7 +4,7 @@ from pygame.sprite import Group, spritecollide, collide_mask
 from pygame.transform import rotate
 
 from .agent import Agent
-from .images import get_image
+
 
 DIR_DELTA = [[0, -1], [1, -1], [1, 0], [1, 1],
              [0, 1], [-1, 1], [-1, 0], [-1, -1]]
@@ -188,8 +188,16 @@ class Worker(Agent):
 
         # Check whether worker has crossed the map boundary
         if self.screen_size is not None:
-            self.rect[0] = np.mod(self.rect[0], self.screen_size[0] - int(self.rect.size[0] / 2))
-            self.rect[1] = np.mod(self.rect[1], self.screen_size[1] - int(self.rect.size[1] / 2))
+            move_x, move_y = 0, 0
+            if self.rect.center[0] >= self.screen_size[0]:
+                move_x = -self.screen_size[0]
+            if self.rect.center[1] >= self.screen_size[1]:
+                move_y = -self.screen_size[1]
+            if self.rect.center[0] < 0:
+                move_x = self.screen_size[0]
+            if self.rect.center[1] < 0:
+                move_y = self.screen_size[1]
+            self.rect.move_ip(move_x, move_y)
 
     def turn(self, world):
 

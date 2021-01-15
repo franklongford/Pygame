@@ -55,7 +55,7 @@ class TestWorker(TestCase):
         self.assertFalse(self.worker.scouting)
 
         self.assertTrue(self.worker.laying_scent)
-        self.assertFalse(self.worker.following_scent)
+        self.assertTrue(self.worker.following_scent)
 
     def test_raid(self):
         # Given
@@ -73,41 +73,37 @@ class TestWorker(TestCase):
         self.assertTrue(self.worker.gathering)
         self.assertFalse(self.worker.scouting)
 
-        self.assertFalse(self.worker.laying_scent)
+        self.assertTrue(self.worker.laying_scent)
         self.assertFalse(self.worker.following_scent)
 
     def test_step_forward(self):
         self.assertEqual((1, 1), self.worker.rect.center)
+        self.assertEqual([0, 0, 2, 2], self.worker.rect)
 
         self.worker.direction = 3
         self.worker.step_forward()
+        self.assertEqual([1, 1, 2, 2], self.worker.rect)
         self.assertEqual((2, 2), self.worker.rect.center)
 
         self.worker.direction = -1
         self.worker.step_forward()
+        self.assertEqual([0, 0, 2, 2], self.worker.rect)
         self.assertEqual((1, 1), self.worker.rect.center)
 
-        self.worker.rect[0], self.worker.rect[1] = 0, 0
         self.worker.step_forward()
+        self.worker.step_forward()
+        self.assertEqual([3, 8, 2, 2], self.worker.rect)
         self.assertEqual((4, 9), self.worker.rect.center)
 
         self.worker.direction = 1
         self.worker.step_forward()
+        self.assertEqual([-1, 7, 2, 2], self.worker.rect)
         self.assertEqual((0, 8), self.worker.rect.center)
 
     def test_reverse_direction(self):
         self.assertEqual(4, self.worker.direction)
-        self.assertEqual(
-            self.worker._image_map[4],
-            self.worker.image
-        )
-
         self.worker.reverse_direction()
         self.assertEqual(0, self.worker.direction)
-        self.assertEqual(
-            self.worker._image_map[0],
-            self.worker.image
-        )
 
     def test_lay_scent(self):
         world = World(10)
@@ -119,7 +115,6 @@ class TestWorker(TestCase):
 
         self.worker.direction = 0
         self.worker.lay_scent(world)
-        print(world.scent_map)
         self.assertEqual(
             1, world.scent_map[1, 2]
         )

@@ -47,7 +47,7 @@ class TestWorld(TestCase):
         self.assertAlmostEqual(
             4.140734205, self.world.scent_map[20, 20])
 
-    def test_visual(self):
+    def _test_visual(self):
         world = World(200, scale=4, n_hives=1, diffusion_rate=0.35)
 
         pg.init()

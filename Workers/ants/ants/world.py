@@ -155,7 +155,7 @@ class World:
                 self.spawn_resource(
                     (int(np.random.rand() * self.map_size[0] - 20),
                      int(np.random.rand() * self.map_size[1] - 20)),
-                    points = np.random.randint(400),
+                    points=np.random.randint(400),
                 )
 
         self.scent_map = gaussian(

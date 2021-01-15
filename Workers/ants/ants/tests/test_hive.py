@@ -11,7 +11,7 @@ class TestHive(TestCase):
     def setUp(self):
         self.n_workers = 5
         self.param = (3, 1, 400, 0.5)
-        self.hive = Hive((0, 0), self.n_workers, self.param)
+        self.hive = Hive((0, 0), self.n_workers, param=self.param)
 
     def test_init(self):
         self.assertEqual(self.n_workers, len(self.hive.workers))

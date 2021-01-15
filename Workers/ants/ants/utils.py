@@ -9,7 +9,7 @@ from .colors import (
 
 def random_number(low=-1.0, high=1.0):
     range = high - low
-    return (np.random.rand() - 0.5) * range
+    return low + np.random.rand() * range
 
 
 def mutate(parameter, threshold_p=0.2, size=0.1):
@@ -23,6 +23,7 @@ def mutate(parameter, threshold_p=0.2, size=0.1):
             size = int(size)
             parameter += int(random_number(low=-size, high=size))
     return parameter
+
 
 def create_background(scent_map, scale=1):
 
