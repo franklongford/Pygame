@@ -19,6 +19,8 @@
 *.rar
 *.tar
 *.zip
+*.egg
+*.egg-info
 
 # Logs and databases #
 ######################
@@ -38,10 +40,10 @@ Thumbs.db
 *.cache/
 *.py[cod]     # Will match .pyc, .pyo and .pyd files.
 *__pycache__/  # Exclude the whole folder
+*.idea/
 
 # Image Files #
 ###############
-*.png
 *.jpeg
 *.pdf
 *.bmp
