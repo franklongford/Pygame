@@ -23,4 +23,5 @@ jobs:
         pip install -e .
     - name: Test with unittest
       run: |
+        source pygame-3.6/bin/activate
         python -m unittest discover -v
